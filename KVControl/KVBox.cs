@@ -12,15 +12,19 @@ namespace KVControl
     {
         bool KVReadOnly { get; set; }
         string KVMemAddr { get; set; }
-        ITag KVTag { get; set; }
+        ITag this[int i] { get; set; }
+        KVType Type { get; }
+     
     }
 
 
-    public enum KVButtonType
+    public enum KVType
     {
         Button = 1,
         Light = 2,
-        ButtonAndLight = 3
+        ButtonAndLight = 3,
+        NumberInput=4,
+        Label=5,
     }
 
 }
