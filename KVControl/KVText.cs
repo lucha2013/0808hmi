@@ -13,17 +13,17 @@ namespace KVControl
     /// <summary>
     /// 指示灯开关
     /// </summary>
-    public class KVButton : Button, KVBox
+    public class KVText : Button, KVBox
     {
         private bool _kvReadOnly;
         private string _kvMenAddr;
         private ITag _kvtag;
 
-        public KVButton() : base()
+        public KVText() : base()
         {
             if (_kvtag == null)
             {
-                _kvtag = new BoolTag(1,Storage.Empty,_kvMenAddr);
+                _kvtag = new BoolTag(1, Storage.Empty, _kvMenAddr);
             }
             this._kvtag.ValueChangeEvent += ValueChange;
         }

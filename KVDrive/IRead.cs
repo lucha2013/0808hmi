@@ -9,11 +9,12 @@ namespace KVDrive
     public interface IReadWrite
     {
         ItemData<bool> ReadBit(DeviceAddress address);
+        bool WriteBit(DeviceAddress address,bool bit);
         ItemData<float> ReadFloat(DeviceAddress address);
         bool WriteFloat(DeviceAddress address, float value);
 
     }
-    //dd
+    
     public interface IDriver : IDisposable
     {
         short ID { get; }
@@ -30,8 +31,8 @@ namespace KVDrive
     }
     public interface IPLCDrive : IDriver, IReadWrite
     {
-        DeviceAddress GetDeviceAddress(string address, ushort len);
-        string GetAddress(DeviceAddress address);
+        //DeviceAddress GetDeviceAddress(string address, ushort len);
+        //string GetAddress(DeviceAddress address);
 
     }
 
@@ -49,15 +50,16 @@ namespace KVDrive
     public struct ItemData<T>
     {
         public T Value;
-        public long TimeStamp;
+        //public long TimeStamp;
         public bool Quality;
 
-        public ItemData(T value, long timeStamp, bool quality)
+        public ItemData(T value,bool quality)
         {
             Value = value;
-            TimeStamp = timeStamp;
+            //TimeStamp = timeStamp;
             Quality = quality;
         }
+        
     }
 
 

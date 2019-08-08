@@ -59,18 +59,7 @@ namespace KVDrive
             throw new NotImplementedException();
         }
 
-        public string GetAddress(DeviceAddress address)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DeviceAddress GetDeviceAddress(string address, ushort len)
-        {
-
-            Response<DeviceAddress> response = DeviceAddress.ParseKeyenceFrom(address, len);
-            return response.Value;
-
-        }
+       
 
         public bool Connect()
         {
@@ -120,103 +109,65 @@ namespace KVDrive
         }
 
 
-        public Response<bool> ReadBit(DeviceAddress address)
+        public ItemData<bool> ReadBit(DeviceAddress address)
+        {
+            throw new NotImplementedException();
+        }
+        public bool WriteBit(DeviceAddress address, bool bit)
         {
             throw new NotImplementedException();
         }
 
-        public Response<float> ReadFloat(DeviceAddress address)
+        public ItemData<float> ReadFloat(DeviceAddress address)
         {
-            Response<float[]> response = ReadFloat(address, 1);
-            Response<float> response2 = new Response<float>();
-            if (response.IsSuccess)
+            ItemData<float[]> response = ReadFloat(address, 1);
+            if (response.Quality)
             {
-                response2.IsSuccess = true;
-                response2.Value = response.Value[0];
-                return response2;
+                return new ItemData<float>(response.Value[0],true);
             }
-            return Response.CreateFailResponse<float>(false, 3, "fail");
+            return new ItemData<float>(-1, false);
         }
-        public Response<float[]> ReadFloat(DeviceAddress address, ushort length)
+        public ItemData<float[]> ReadFloat(DeviceAddress address, ushort length)
         {
             float[] f = new float[length];
-            ushort len = (ushort)(length * 2);
+
             byte[] command = MelsecHelper.BuildAsciiReadMcCoreCommand(address, false);
 
-            byte[] read = SyncSend(PackMcCommand(command, 0, 0));
+            byte[] read = SyncSend(MelsecHelper.PackMcCommand(command, 0, 0));
 
             ushort errorCode = Convert.ToUInt16(Encoding.ASCII.GetString(read, 18, 4), 16);
-            if (errorCode != 0) Response.CreateFailResponse<float>(false, 3, "fail");
+            if (errorCode != 0) return (new ItemData<float[]>(null,false));
 
-            byte[] extract = ExtractActualData(read, false);
+            byte[] extract = MelsecHelper.ExtractActualData(read, false);
             for (int i = 0; i < (extract.Length) / 4; i++)
             {
                 f[i] = BitConverter.ToSingle(extract, i * 4);
             }
-            return Response.CreateSuccessResponse<float[]>(f);
+            return new ItemData<float[]>(f,true);
         }
 
         public bool WriteFloat(DeviceAddress address, float value)
         {
-            throw new NotImplementedException();
+            float[] f1 = new float[1] { value };
+            return WriteFloats(address, f1);
         }
-
-
-        public static byte[] PackMcCommand(byte[] mcCore, byte networkNumber = 0, byte networkStationNumber = 0)
+        public bool WriteFloats(DeviceAddress address, float[] value)
         {
-            byte[] plcCommand = new byte[22 + mcCore.Length];
-            plcCommand[0] = 0x35;                                                                        // 副标题
-            plcCommand[1] = 0x30;
-            plcCommand[2] = 0x30;
-            plcCommand[3] = 0x30;
-            plcCommand[4] = MelsecHelper.BuildBytesFromData(networkNumber)[0];                         // 网络号
-            plcCommand[5] = MelsecHelper.BuildBytesFromData(networkNumber)[1];
-            plcCommand[6] = 0x46;                                                                        // PLC编号
-            plcCommand[7] = 0x46;
-            plcCommand[8] = 0x30;                                                                        // 目标模块IO编号
-            plcCommand[9] = 0x33;
-            plcCommand[10] = 0x46;
-            plcCommand[11] = 0x46;
-            plcCommand[12] = MelsecHelper.BuildBytesFromData(networkStationNumber)[0];                  // 目标模块站号
-            plcCommand[13] = MelsecHelper.BuildBytesFromData(networkStationNumber)[1];
-            plcCommand[14] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[0];     // 请求数据长度
-            plcCommand[15] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[1];
-            plcCommand[16] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[2];
-            plcCommand[17] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[3];
-            plcCommand[18] = 0x30;                                                                        // CPU监视定时器
-            plcCommand[19] = 0x30;
-            plcCommand[20] = 0x31;
-            plcCommand[21] = 0x30;
-            mcCore.CopyTo(plcCommand, 22);
 
-            return plcCommand;
-        }
-        public static byte[] ExtractActualData(byte[] response, bool isBit)
-        {
-            if (isBit)
+            byte[] b1 = new byte[value.Length * 4];
+            for (int i = 0; i < value.Length; i++)
             {
-                // 位读取
-                byte[] Content = new byte[response.Length - 22];
-                for (int i = 22; i < response.Length; i++)
-                {
-                    Content[i - 22] = response[i] == 0x30 ? (byte)0x00 : (byte)0x01;
-                }
-
-                return (Content);
+                Array.Copy(BitConverter.GetBytes(value[i]), 0, b1, i * 4, 4);
             }
-            else
-            {
-                // 字读取
-                byte[] Content = new byte[(response.Length - 22) / 2];
-                for (int i = 0; i < Content.Length / 2; i++)
-                {
-                    ushort tmp = Convert.ToUInt16(Encoding.ASCII.GetString(response, i * 4 + 22, 4), 16);
-                    BitConverter.GetBytes(tmp).CopyTo(Content, i * 2);
-                }
+            byte[] command = MelsecHelper.BuildAsciiWriteWordCoreCommand(address, b1);
 
-                return (Content);
-            }
+            byte[] read = SyncSend(MelsecHelper.PackMcCommand(command, 0, 0));
+            ushort errorCode = Convert.ToUInt16(Encoding.ASCII.GetString(read, 18, 4), 16);
+            if (errorCode != 0) return false;
+            return true;
         }
+
+
 
         public IGroup AddGroup(string name, short id, int updateRate, float deadBand = 0, bool active = false)
         {

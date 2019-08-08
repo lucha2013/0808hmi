@@ -9,10 +9,11 @@ namespace KVDrive
 {
     public abstract class ITag : IComparable<ITag>
     {
-        public ITag(short id, Storage value)
+        public ITag(short id, Storage value,string address)
         {
             this._id = id;
             this._value = value;
+            this._address = address;
 
         }
 
@@ -23,7 +24,7 @@ namespace KVDrive
         //private DateTime _timeStamp;
         private short _id;
 
-
+        public IDriver Parent { get { return _drive; } }
         //public DateTime TimeStamp { get { return _timeStamp; } }
         public short ID { get { return _id; } }
         protected Storage _value;
@@ -45,9 +46,22 @@ namespace KVDrive
             }
         }
 
+        public string GetAddress(DeviceAddress address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeviceAddress GetDeviceAddress(string address, ushort len)
+        {
+
+            ItemData<DeviceAddress> response = DeviceAddress.ParseKeyenceFrom(address, len);
+            return response.Value;
+
+        }
+
         public abstract Storage Read();
 
-        public abstract int Write(object value);
+        public abstract bool Write(object value);
         public int CompareTo(ITag other)
         {
             if (this.Equals(other))
@@ -61,6 +75,7 @@ namespace KVDrive
         }
         public ValueChangeHandler ValueChangeEvent;
         private string _address;
+        private IDriver _drive;
     }
     public class BoolTag : ITag
     {
@@ -68,14 +83,58 @@ namespace KVDrive
         //{
 
         //}
+        public BoolTag(short id, Storage value, string address):base(id, value,address)
+        {
+
+        }
         public override Storage Read()
         {
-            throw new NotImplementedException();
+            DeviceAddress address=GetDeviceAddress(Address,1);
+            ItemData<bool> response = ((KeyencePlcDrive)Parent).ReadBit(address);
+            if (!response.Quality)
+            {
+                //return null; 怎么写？
+            }
+            Storage value = Storage.Empty;
+            value.Boolean = response.Value;
+            return value;
         }
 
-        public override int Write(object value)
+        public override bool Write(object value)
         {
-            throw new NotImplementedException();
+            DeviceAddress address = GetDeviceAddress(Address, 1);
+            return ((KeyencePlcDrive)Parent).WriteBit(address,(bool)value);
+
+        }
+    }
+    public class FloatTag : ITag
+    {
+        //public BoolTag() : base()
+        //{
+
+        //}
+        public FloatTag(short id, Storage value, string address) : base(id, value, address)
+        {
+
+        }
+        public override Storage Read()
+        {
+            DeviceAddress address = GetDeviceAddress(Address, 2);
+            ItemData<float> response = ((KeyencePlcDrive)Parent).ReadFloat(address);
+            if (!response.Quality)
+            {
+                //return null; 怎么写？
+            }
+            Storage value = Storage.Empty;
+            value.Single = response.Value;
+            return value;
+        }
+
+        public override bool Write(object value)
+        {
+            DeviceAddress address = GetDeviceAddress(Address, 2);
+            return ((KeyencePlcDrive)Parent).WriteFloat(address, (float)value);
+
         }
     }
 

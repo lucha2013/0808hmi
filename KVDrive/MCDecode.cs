@@ -197,9 +197,9 @@ namespace KVDrive
             }
             catch (Exception ex)
             {
-                return new ItemData<DeviceAddress>("NotSupportedDataType");
+                return new ItemData<DeviceAddress>(null,false);
             }
-            return ItemData.CreateSuccessResponse(addressData);
+            return new ItemData<DeviceAddress>(addressData,true);
         }
     }
 
@@ -686,6 +686,62 @@ namespace KVDrive
             return command;
         }
 
+
+        public static byte[] PackMcCommand(byte[] mcCore, byte networkNumber = 0, byte networkStationNumber = 0)
+        {
+            byte[] plcCommand = new byte[22 + mcCore.Length];
+            plcCommand[0] = 0x35;                                                                        // 副标题
+            plcCommand[1] = 0x30;
+            plcCommand[2] = 0x30;
+            plcCommand[3] = 0x30;
+            plcCommand[4] = MelsecHelper.BuildBytesFromData(networkNumber)[0];                         // 网络号
+            plcCommand[5] = MelsecHelper.BuildBytesFromData(networkNumber)[1];
+            plcCommand[6] = 0x46;                                                                        // PLC编号
+            plcCommand[7] = 0x46;
+            plcCommand[8] = 0x30;                                                                        // 目标模块IO编号
+            plcCommand[9] = 0x33;
+            plcCommand[10] = 0x46;
+            plcCommand[11] = 0x46;
+            plcCommand[12] = MelsecHelper.BuildBytesFromData(networkStationNumber)[0];                  // 目标模块站号
+            plcCommand[13] = MelsecHelper.BuildBytesFromData(networkStationNumber)[1];
+            plcCommand[14] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[0];     // 请求数据长度
+            plcCommand[15] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[1];
+            plcCommand[16] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[2];
+            plcCommand[17] = MelsecHelper.BuildBytesFromData((ushort)(plcCommand.Length - 18))[3];
+            plcCommand[18] = 0x30;                                                                        // CPU监视定时器
+            plcCommand[19] = 0x30;
+            plcCommand[20] = 0x31;
+            plcCommand[21] = 0x30;
+            mcCore.CopyTo(plcCommand, 22);
+
+            return plcCommand;
+        }
+        public static byte[] ExtractActualData(byte[] response, bool isBit)
+        {
+            if (isBit)
+            {
+                // 位读取
+                byte[] Content = new byte[response.Length - 22];
+                for (int i = 22; i < response.Length; i++)
+                {
+                    Content[i - 22] = response[i] == 0x30 ? (byte)0x00 : (byte)0x01;
+                }
+
+                return (Content);
+            }
+            else
+            {
+                // 字读取
+                byte[] Content = new byte[(response.Length - 22) / 2];
+                for (int i = 0; i < Content.Length / 2; i++)
+                {
+                    ushort tmp = Convert.ToUInt16(Encoding.ASCII.GetString(response, i * 4 + 22, 4), 16);
+                    BitConverter.GetBytes(tmp).CopyTo(Content, i * 2);
+                }
+
+                return (Content);
+            }
+        }
         #endregion
 
         #region Common Logic
