@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KVDrive;
 
 namespace hmi0807_2
 {
     public partial class ParaSetting : Form
     {
         public Form FromWindow { get; set; }
+        public KVGroup ParaSettingGroup { get; set; }
         public ParaSetting()
         {
             InitializeComponent();

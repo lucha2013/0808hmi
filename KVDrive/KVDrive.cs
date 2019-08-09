@@ -4,11 +4,20 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using KVDrive;
 
 namespace KVDrive
 {
     public class KeyencePlcDrive : IPLCDrive
     {
+        public KeyencePlcDrive(short id,string name,string ip,int port)
+        {
+            _id = id;
+            _name = name;
+            _ip = ip;
+            _port = port;
+
+        }
         private short _id;
         private string _name;
         private string _ip;
@@ -60,6 +69,19 @@ namespace KVDrive
         }
 
        
+        public void init()
+        {
+            _timeout = 10000;
+            if (!Connect())
+            {
+                return;
+            }
+
+                
+
+        }
+
+
 
         public bool Connect()
         {
@@ -108,7 +130,7 @@ namespace KVDrive
 
         }
 
-
+        #region ReadWrite
         public ItemData<bool> ReadBit(DeviceAddress address)
         {
             throw new NotImplementedException();
@@ -166,7 +188,7 @@ namespace KVDrive
             if (errorCode != 0) return false;
             return true;
         }
-
+        #endregion
 
 
         public IGroup AddGroup(string name, short id, int updateRate, float deadBand = 0, bool active = false)

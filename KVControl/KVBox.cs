@@ -12,8 +12,8 @@ namespace KVControl
     {
         bool KVReadOnly { get; set; }
         string KVMemAddr { get; set; }
-        ITag this[int i] { get; set; }
-        KVType Type { get; }
+        ITag[] KVTags { get; set; }
+        KVType KVType { get; }
      
     }
 

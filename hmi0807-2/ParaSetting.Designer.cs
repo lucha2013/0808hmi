@@ -36,47 +36,55 @@
             // kvButton1
             // 
             this.kvButton1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvButton1.KVMemAddr = null;
+            this.kvButton1.KVMemAddr = "MR2000";
             this.kvButton1.KVReadOnly = false;
             this.kvButton1.KVTrueColor = System.Drawing.Color.Empty;
-            this.kvButton1.Location = new System.Drawing.Point(251, 110);
+            this.kvButton1.KVType = KVControl.KVType.Light;
+            this.kvButton1.Location = new System.Drawing.Point(188, 88);
+            this.kvButton1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.kvButton1.Name = "kvButton1";
-            this.kvButton1.Size = new System.Drawing.Size(75, 23);
+            this.kvButton1.Size = new System.Drawing.Size(78, 36);
             this.kvButton1.TabIndex = 0;
-            this.kvButton1.Text = "kvButton1";
+            this.kvButton1.Text = "抬起";
+            this.kvButton1.KVTags[0] = new KVDrive.BoolTag(2, KVDrive.Storage.Empty, kvButton1.KVMemAddr);
             this.kvButton1.UseVisualStyleBackColor = true;
             // 
             // kvText1
             // 
             this.kvText1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvText1.KVMemAddr = null;
+            this.kvText1.KVMemAddr = "EM2000";
             this.kvText1.KVReadOnly = false;
             this.kvText1.KVTrueColor = System.Drawing.Color.Empty;
-            this.kvText1.Location = new System.Drawing.Point(440, 109);
+            this.kvText1.KVType = KVControl.KVType.NumberInput;
+            this.kvText1.Location = new System.Drawing.Point(330, 87);
+            this.kvText1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.kvText1.Name = "kvText1";
-            this.kvText1.Size = new System.Drawing.Size(75, 23);
+            this.kvText1.Size = new System.Drawing.Size(87, 37);
             this.kvText1.TabIndex = 1;
-            this.kvText1.Text = "kvText1";
+            this.kvText1.Text = this.kvText1.KVMemAddr;
+            this.kvText1.KVTags[0] = new KVDrive.FloatTag(1, KVDrive.Storage.Empty, kvText1.KVMemAddr);
             this.kvText1.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(251, 278);
+            this.button1.Location = new System.Drawing.Point(188, 222);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(78, 31);
             this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
+            this.button1.Text = "返回";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // ParaSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 360);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.kvText1);
             this.Controls.Add(this.kvButton1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "ParaSetting";
             this.Text = "ParaSetting";
             this.Load += new System.EventHandler(this.ParaSetting_Load);

@@ -95,6 +95,10 @@
       <Project>{42e59f1b-3111-4107-a1ba-c4add6d030b7}</Project>
       <Name>KVControl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KVDrive\KVDrive.csproj">
+      <Project>{0376a34f-64f0-4045-95ef-ecdcdfd812ba}</Project>
+      <Name>KVDrive</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

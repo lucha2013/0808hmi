@@ -17,19 +17,19 @@ namespace KVControl
     {
         private bool _kvReadOnly;
         private string _kvMenAddr;
-        private ITag[] _kvTag=new ITag[1];
-        private KVType _type;
+        private ITag[] _kvTags=new ITag[1];
+        private KVType _kvType;
 
         public KVText() : base()
         {
-            if (_kvTag[0] == null)
+            if (_kvTags[0] == null)
             {
-                _kvTag[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
+                _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
             }
-            this._kvTag[0].ValueChangeEvent += ValueChange;
+            this._kvTags[0].ValueChangeEvent += ValueChange;
         }
 
-        public ITag this[int i] { get { return _kvTag[i]; } set { _kvTag[i] = value; } }
+        public ITag[] KVTags { get { return _kvTags; } set { _kvTags = value; } }
 
         public Color KVTrueColor
         {
@@ -43,7 +43,7 @@ namespace KVControl
         public bool KVReadOnly { get { return _kvReadOnly; } set { _kvReadOnly = value; } }
         public string KVMemAddr { get { return _kvMenAddr; } set { _kvMenAddr = value; } }
 
-        public KVType Type { get { return _type; }set { _type = value; } }
+        public KVType KVType { get { return _kvType; }set { _kvType = value; } }
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {

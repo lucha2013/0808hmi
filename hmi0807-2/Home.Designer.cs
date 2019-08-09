@@ -43,7 +43,10 @@
             this.kvButton1.Name = "kvButton1";
             this.kvButton1.Size = new System.Drawing.Size(92, 36);
             this.kvButton1.TabIndex = 0;
-            this.kvButton1.Text = "kvButton1";
+            this.kvButton1.Text = "压紧";
+            this.kvButton1.KVMemAddr = "MR1000";
+            this.kvButton1.KVType = KVControl.KVType.Light;
+            this.kvButton1.KVTags[0] = new KVDrive.BoolTag(2, KVDrive.Storage.Empty, kvButton1.KVMemAddr);
             this.kvButton1.UseVisualStyleBackColor = true;
             // 
             // kvText1
@@ -56,7 +59,11 @@
             this.kvText1.Name = "kvText1";
             this.kvText1.Size = new System.Drawing.Size(88, 36);
             this.kvText1.TabIndex = 1;
-            this.kvText1.Text = "kvText1";
+            this.kvText1.KVMemAddr = "EM1000";
+            this.kvText1.Text = kvText1.KVMemAddr;
+            this.kvText1.KVType = KVControl.KVType.NumberInput;
+            this.kvText1.KVReadOnly = false;
+            this.kvText1.KVTags[0] = new KVDrive.FloatTag(1, KVDrive.Storage.Empty, kvText1.KVMemAddr);
             this.kvText1.UseVisualStyleBackColor = true;
             // 
             // button1
@@ -65,8 +72,9 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 42);
             this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
+            this.button1.Text = "参数设定";
             this.button1.UseVisualStyleBackColor = true;
+        
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Home

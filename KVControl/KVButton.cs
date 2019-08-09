@@ -14,20 +14,20 @@ namespace KVControl
     /// 指示灯开关
     /// [0]
     /// </summary>
-    public class KVButton : Button, KVBox
+    public class KVButton : Button,KVBox
     {
         private bool _kvReadOnly;
         private string _kvMenAddr;
-        private ITag[] _kvtag=new ITag[2];
-        private KVType _type;
+        private ITag[] _kvTags=new ITag[2];
+        private KVType _kvType;
 
         public KVButton() : base()
         {
             for(int i=0;i<2;i++)
             {
-                _kvtag[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
+                _kvTags[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
             }
-            this._kvtag[0].ValueChangeEvent += ValueChange;
+            this._kvTags[0].ValueChangeEvent += ValueChange;
         }
         public Color KVTrueColor
         {
@@ -43,24 +43,24 @@ namespace KVControl
             get { return _kvReadOnly; }
             set
             {
-                if (_type == KVType.Light)
+                if (_kvType == KVType.Light)
                 {
                     _kvReadOnly = true;
                 }
-                else if( _type==KVType.Button || _type == KVType.ButtonAndLight)
+                else if(_kvType == KVType.Button || _kvType == KVType.ButtonAndLight)
                 {
                     _kvReadOnly = false;
                 }
             }
         }
         public string KVMemAddr { get { return _kvMenAddr; } set { _kvMenAddr = value; } }
-        public ITag this[int i]
+        public ITag[] KVTags
         {
-            get { return _kvtag[i]; }
-            set { _kvtag[i] = value; }
+            get { return _kvTags; }
+            set { _kvTags= value; }
         }
 
-        public KVType Type { get { return _type; ; } }
+        public KVType KVType { get { return _kvType;  }set { _kvType = value; } }
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {

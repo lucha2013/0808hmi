@@ -8,11 +8,20 @@ namespace KVDrive
 {
     public class KVGroup : IGroup
     {
+        public KVGroup(bool isActive,short id,string name,int updateRate,List<ITag> items)
+        {
+            _isActive = isActive;
+            _id = id;
+            _name = name;
+            _updateRate = updateRate;
+            _items = items;
+        }
         private bool _isActive;
         private short _id;
         private string _name;
         private int _updateRate;
         private List<ITag> _items;
+
 
         public bool IsActive { get { return _isActive; } set { _isActive = value; } }
 
