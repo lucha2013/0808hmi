@@ -9,11 +9,20 @@ namespace KVDrive
 {
     public abstract class ITag : IComparable<ITag>
     {
-        public ITag(short id, Storage value,string address)
+        public ITag(short id, Storage value,string address,IDriver parent)
         {
             this._id = id;
             this._value = value;
             this._address = address;
+            this._drive = parent;
+
+        }
+        public ITag(short id, Storage value, string address)
+        {
+            this._id = id;
+            this._value = value;
+            this._address = address;
+
 
         }
 
@@ -24,7 +33,7 @@ namespace KVDrive
         //private DateTime _timeStamp;
         private short _id;
 
-        public IDriver Parent { get { return _drive; } }
+        public IDriver Parent { get { return _drive; } set { _drive = value; } }
         //public DateTime TimeStamp { get { return _timeStamp; } }
         public short ID { get { return _id; } }
         protected Storage _value;
@@ -35,16 +44,22 @@ namespace KVDrive
                 return _value;
             }
         }
+        public Storage Refresh()
+        {
+            return Read();
+        }
 
         public string Address { get { return _address; } set { _address = value; } }
-        public void Update(Storage newValue)
-        {
-            if (_value.Equals(newValue)) return;
-            if (ValueChangeEvent != null)
-            {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
-            }
-        }
+
+        public abstract void Update(Storage newValue);
+        //public void Update(Storage newValue)
+        //{
+        //    if (_value.Equals(newValue)) return;
+        //    if (ValueChangeEvent != null)
+        //    {
+        //        ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+        //    }
+        //}
 
         public string GetAddress(DeviceAddress address)
         {
@@ -99,7 +114,14 @@ namespace KVDrive
             value.Boolean = response.Value;
             return value;
         }
-
+        public override void Update(Storage newValue)
+        {
+            if (_value.Boolean.Equals(newValue.Boolean)) return;
+            if (ValueChangeEvent != null)
+            {
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+            }
+        }
         public override bool Write(object value)
         {
             DeviceAddress address = GetDeviceAddress(Address, 1);
@@ -129,7 +151,14 @@ namespace KVDrive
             value.Single = response.Value;
             return value;
         }
-
+        public override void Update(Storage newValue)
+        {
+            if (_value.Single.Equals(newValue.Single)) return;
+            if (ValueChangeEvent != null)
+            {
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+            }
+        }
         public override bool Write(object value)
         {
             DeviceAddress address = GetDeviceAddress(Address, 2);

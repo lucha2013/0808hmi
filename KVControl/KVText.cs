@@ -19,6 +19,7 @@ namespace KVControl
         private string _kvMenAddr;
         private ITag[] _kvTags=new ITag[1];
         private KVType _kvType;
+        
 
         public KVText() : base()
         {
@@ -26,7 +27,7 @@ namespace KVControl
             {
                 _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
             }
-            this._kvTags[0].ValueChangeEvent += ValueChange;
+            //this._kvTags[0].ValueChangeEvent += ValueChange;  
         }
 
         public ITag[] KVTags { get { return _kvTags; } set { _kvTags = value; } }
@@ -47,7 +48,24 @@ namespace KVControl
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {
-            this.Text = e.Value.ToString() ;
+            if (this.InvokeRequired)//如果调用控件的线程和创建创建控件的线程不是同一个则为True
+            {
+                while (!this.IsHandleCreated)
+                {
+                    //解决窗体关闭时出现“访问已释放句柄“的异常
+                    if (this.Disposing || this.IsDisposed)
+                        return;
+                }
+                this.Invoke(new Action(() => 
+                {
+                    this.Text = e.Value.ToString();
+                }));
+                
+            }
+            else
+            {
+                this.Text = e.Value.ToString();
+            }
         }
     }
 }

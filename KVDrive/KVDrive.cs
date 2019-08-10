@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using KVDrive;
+using System.Timers;
 
 namespace KVDrive
 {
@@ -24,6 +24,8 @@ namespace KVDrive
         private int _port;
         private Socket socketSyc;
         private int _timeout;
+        private IEnumerable<IGroup> _grps;
+        private Timer time1 = new Timer();
 
         public short ID
         {
@@ -61,7 +63,11 @@ namespace KVDrive
             set { _timeout = value; }
         }
 
-        public IEnumerable<IGroup> Groups => throw new NotImplementedException();
+        public IEnumerable<IGroup> Groups
+        {
+            get { return _grps; }
+            set { _grps = value; }
+        }
 
         public void Dispose()
         {
@@ -76,12 +82,46 @@ namespace KVDrive
             {
                 return;
             }
+            time1.Enabled = true;
+            time1.AutoReset = false;
+            time1.Interval = 1000;
+            time1.Elapsed += Time1_Elapsed;
+            time1.Start();
+            //while (true)
+            //{
+            //    foreach(IGroup grp in _grps)
+            //    {
+            //        if (grp.IsActive)
+            //        {
+                        
+            //        }
+            //    }
+            //}
+            
 
                 
 
         }
 
+        private void Time1_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            foreach (IGroup grp in _grps)
+            {
+                if (grp.IsActive)
+                {
+                    time1.Interval = 100000000;
+                    Refresh(grp);
+                }
+            }
+        }
 
+        private void Refresh(IGroup grp)
+        {
+            foreach(ITag tag in grp.Items)
+            {
+                tag.Update(tag.Refresh());
+            }
+        }
 
         public bool Connect()
         {

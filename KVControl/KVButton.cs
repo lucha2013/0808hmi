@@ -27,7 +27,7 @@ namespace KVControl
             {
                 _kvTags[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
             }
-            this._kvTags[0].ValueChangeEvent += ValueChange;
+            //this._kvTags[0].ValueChangeEvent += ValueChange;
         }
         public Color KVTrueColor
         {

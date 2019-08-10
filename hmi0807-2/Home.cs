@@ -15,10 +15,12 @@ namespace hmi0807_2
 {
     public partial class Home : Form
     {
-        private KVGroup _homeGroup;
+        
+        public KVGroup[]  Groups=new KVGroup[20];
 
         public ParaSetting ParaSettingForm{ get; set; }
-        public KVGroup HomeGroup { get { return _homeGroup; } set { _homeGroup = value; } }
+        
+       
         public Home()
         {
             InitializeComponent();
@@ -33,11 +35,22 @@ namespace hmi0807_2
         private void Home_Load(object sender, EventArgs e)
         {
             ParaSettingForm = new ParaSetting() { FromWindow = this };
-            AddGroup(this, HomeGroup = new KVGroup(true, 1, "homeGroup", 50, new List<ITag>()));
-            AddGroup(ParaSettingForm, HomeGroup);
+            AddTags2Group(this, Groups[0] = new KVGroup(true, 1, "homeGroup", 50, new List<ITag>()));
+            AddTags2Group(ParaSettingForm, Groups[1] = new KVGroup(false, 2, "paraSettingGroup", 50, new List<ITag>()));
+            KeyencePlcDrive kvPLCDrive = new KeyencePlcDrive(1, "KeyencePLCDrive", "192.168.50.211", 5000);
+            foreach(ITag tag in Groups[0].Items)
+            {
+                tag.Parent = kvPLCDrive;
+            }
+            foreach (ITag tag in Groups[1].Items)
+            {
+                tag.Parent = kvPLCDrive;
+            }
+            kvPLCDrive.Groups = Groups;
+            kvPLCDrive.init();
         }
 
-        private void AddGroup(Form home, KVGroup homeGroup)
+        private void AddTags2Group(Form home, KVGroup homeGroup)
         {
 
             Control.ControlCollection controlCollection = home.Controls;

@@ -22,7 +22,7 @@ namespace KVDrive
         string ServerName { get; set; }
         bool IsClosed { get; }
         int TimeOut { get; set; }
-        IEnumerable<IGroup> Groups { get; }
+        IEnumerable<IGroup> Groups { get; set; }
         ////IDataServer Parent { get; }
         bool Connect();
         IGroup AddGroup(string name, short id, int updateRate, float deadBand = 0f, bool active = false);

@@ -36,7 +36,7 @@
             // kvButton1
             // 
             this.kvButton1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvButton1.KVMemAddr = "MR2000";
+            this.kvButton1.KVMemAddr = "M2000";
             this.kvButton1.KVReadOnly = false;
             this.kvButton1.KVTrueColor = System.Drawing.Color.Empty;
             this.kvButton1.KVType = KVControl.KVType.Light;
@@ -52,7 +52,7 @@
             // kvText1
             // 
             this.kvText1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvText1.KVMemAddr = "EM2000";
+            this.kvText1.KVMemAddr = "D2000";
             this.kvText1.KVReadOnly = false;
             this.kvText1.KVTrueColor = System.Drawing.Color.Empty;
             this.kvText1.KVType = KVControl.KVType.NumberInput;
@@ -63,6 +63,7 @@
             this.kvText1.TabIndex = 1;
             this.kvText1.Text = this.kvText1.KVMemAddr;
             this.kvText1.KVTags[0] = new KVDrive.FloatTag(1, KVDrive.Storage.Empty, kvText1.KVMemAddr);
+            this.kvText1.KVTags[0].ValueChangeEvent += this.kvText1.ValueChange;
             this.kvText1.UseVisualStyleBackColor = true;
             // 
             // button1
