@@ -88,5 +88,10 @@ namespace hmi0807_2
             PropertyInfo propertyInfo = t.GetProperty(property);
             return o.GetType().GetProperty(property) != null;
         }
+
+        private void KvText1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

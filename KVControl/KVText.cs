@@ -13,7 +13,7 @@ namespace KVControl
     /// <summary>
     /// 指示灯开关
     /// </summary>
-    public class KVText : Button, KVBox
+    public class KVText : TextBox, KVBox
     {
         private bool _kvReadOnly;
         private string _kvMenAddr;
@@ -23,10 +23,10 @@ namespace KVControl
 
         public KVText() : base()
         {
-            if (_kvTags[0] == null)
-            {
-                _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
-            }
+            //if (_kvTags[0] == null)
+            //{
+            //    _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
+            //}
             //this._kvTags[0].ValueChangeEvent += ValueChange;  
         }
 
@@ -58,13 +58,13 @@ namespace KVControl
                 }
                 this.Invoke(new Action(() => 
                 {
-                    this.Text = e.Value.ToString();
+                    this.Text = e.Value;
                 }));
                 
             }
             else
             {
-                this.Text = e.Value.ToString();
+                this.Text = e.Value;
             }
         }
     }

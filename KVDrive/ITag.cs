@@ -119,7 +119,7 @@ namespace KVDrive
             if (_value.Boolean.Equals(newValue.Boolean)) return;
             if (ValueChangeEvent != null)
             {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue.Boolean.ToString()));
             }
         }
         public override bool Write(object value)
@@ -156,7 +156,7 @@ namespace KVDrive
             if (_value.Single.Equals(newValue.Single)) return;
             if (ValueChangeEvent != null)
             {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue.Single.ToString()));
             }
         }
         public override bool Write(object value)
@@ -228,11 +228,11 @@ namespace KVDrive
     public delegate void ValueChangeHandler(ITag sender, ValueChangeEventArgs e);
     public class ValueChangeEventArgs : EventArgs
     {
-        public ValueChangeEventArgs(Storage value)
+        public ValueChangeEventArgs(string value)
         {
             this.Value = value;
         }
 
-        public Storage Value;
+        public string Value;
     }
 }

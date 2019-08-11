@@ -64,7 +64,7 @@ namespace KVControl
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {
-            if (e.Value.Boolean)
+            if (e.Value.Equals("true"))
             {
                 this.BackColor = KVTrueColor;
             }

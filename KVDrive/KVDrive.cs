@@ -175,7 +175,15 @@ namespace KVDrive
         {
             throw new NotImplementedException();
         }
+        public ItemData<bool> ReadBits(DeviceAddress address,short length)
+        {
+            throw new NotImplementedException();
+        }
         public bool WriteBit(DeviceAddress address, bool bit)
+        {
+            throw new NotImplementedException();
+        }
+        public bool WriteBits(DeviceAddress address, bool[] bits)
         {
             throw new NotImplementedException();
         }
