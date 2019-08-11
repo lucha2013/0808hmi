@@ -107,9 +107,10 @@ namespace KVDrive
         {
             foreach (IGroup grp in _grps)
             {
-                if (grp.IsActive)
+
+                if (grp != null&&grp.IsActive )
                 {
-                    time1.Interval = 100000000;
+                    time1.Interval = 10000;
                     Refresh(grp);
                 }
             }
@@ -120,6 +121,7 @@ namespace KVDrive
             foreach(ITag tag in grp.Items)
             {
                 tag.Update(tag.Refresh());
+                tag.UpdatePLC();
             }
         }
 
@@ -173,31 +175,57 @@ namespace KVDrive
         #region ReadWrite
         public ItemData<bool> ReadBit(DeviceAddress address)
         {
-            throw new NotImplementedException();
+            ItemData<byte[]> b1 = ReadBits(address, 1);
+            if (b1.Value[0] == (byte)0)
+            {
+                return new ItemData<bool>(false, false);
+            }
+            return new ItemData<bool>(true, false);
         }
-        public ItemData<bool> ReadBits(DeviceAddress address,short length)
+        public ItemData<byte[]> ReadBits(DeviceAddress address,short length)
         {
-            throw new NotImplementedException();
+            float[] f = new float[length];
+
+            byte[] command = MelsecHelper.BuildAsciiReadMcCoreCommand(address, true);
+
+            byte[] read = SyncSend(MelsecHelper.PackMcCommand(command, 0, 0));
+
+            ushort errorCode = Convert.ToUInt16(Encoding.ASCII.GetString(read, 18, 4), 16);
+            if (errorCode != 0) return (new ItemData<byte[]>(null,false));
+
+            byte[] extract = MelsecHelper.ExtractActualData(read, true);
+
+            return new ItemData<byte[]>(extract, true);
         }
         public bool WriteBit(DeviceAddress address, bool bit)
         {
-            throw new NotImplementedException();
+            bool[] bs = new bool[1] { bit};
+            return WriteBits(address, bs);
         }
         public bool WriteBits(DeviceAddress address, bool[] bits)
         {
-            throw new NotImplementedException();
+            byte[] command = MelsecHelper.BuildAsciiWriteBitCoreCommand(address, bits);
+
+            byte[] read = SyncSend(MelsecHelper.PackMcCommand(command, 0, 0));
+
+            ushort errorCode = Convert.ToUInt16(Encoding.ASCII.GetString(read, 18, 4), 16);
+            if (errorCode != 0) return false;
+
+            byte[] extract = MelsecHelper.ExtractActualData(read, true);
+
+            return true;
         }
 
         public ItemData<float> ReadFloat(DeviceAddress address)
         {
-            ItemData<float[]> response = ReadFloat(address, 1);
+            ItemData<float[]> response = ReadFloats(address, 1);
             if (response.Quality)
             {
                 return new ItemData<float>(response.Value[0],true);
             }
             return new ItemData<float>(-1, false);
         }
-        public ItemData<float[]> ReadFloat(DeviceAddress address, ushort length)
+        public ItemData<float[]> ReadFloats(DeviceAddress address, ushort length)
         {
             float[] f = new float[length];
 

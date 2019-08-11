@@ -46,6 +46,8 @@
             this.kvButton1.Size = new System.Drawing.Size(104, 45);
             this.kvButton1.TabIndex = 0;
             this.kvButton1.Text = "抬起";
+            this.kvButton1.KVTags[0] = new KVDrive.BoolTag(4, KVDrive.Storage.Empty, kvButton1.KVMemAddr);
+            this.kvButton1.KVTags[0].ValueChangeEvent += this.kvButton1.ValueChange;
             this.kvButton1.UseVisualStyleBackColor = true;
             // 
             // button1

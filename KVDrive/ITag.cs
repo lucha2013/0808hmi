@@ -15,6 +15,7 @@ namespace KVDrive
             this._value = value;
             this._address = address;
             this._drive = parent;
+            this._lastValue = _value;
 
         }
         public ITag(short id, Storage value, string address)
@@ -22,12 +23,13 @@ namespace KVDrive
             this._id = id;
             this._value = value;
             this._address = address;
-
+            this._lastValue = _value;
 
         }
 
         public ITag()
         {
+            
         }
 
         //private DateTime _timeStamp;
@@ -37,6 +39,7 @@ namespace KVDrive
         //public DateTime TimeStamp { get { return _timeStamp; } }
         public short ID { get { return _id; } }
         protected Storage _value;
+        protected Storage _lastValue;
         public Storage Value
         {
             get
@@ -44,10 +47,15 @@ namespace KVDrive
                 return _value;
             }
         }
+        /// <summary>
+        /// 读取PLC
+        /// </summary>
+        /// <returns></returns>
         public Storage Refresh()
         {
             return Read();
         }
+            
 
         public string Address { get { return _address; } set { _address = value; } }
 
@@ -60,7 +68,7 @@ namespace KVDrive
         //        ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
         //    }
         //}
-
+        public abstract void UpdatePLC();
         public string GetAddress(DeviceAddress address)
         {
             throw new NotImplementedException();
@@ -100,7 +108,7 @@ namespace KVDrive
         //}
         public BoolTag(short id, Storage value, string address):base(id, value,address)
         {
-
+            
         }
         public override Storage Read()
         {
@@ -117,15 +125,25 @@ namespace KVDrive
         public override void Update(Storage newValue)
         {
             if (_value.Boolean.Equals(newValue.Boolean)) return;
+            _value = newValue;
+            _lastValue = newValue;
             if (ValueChangeEvent != null)
             {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue.Boolean.ToString()));
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
             }
+        }
+        public override void UpdatePLC()
+        {
+            if (_lastValue.Boolean.Equals(_value.Boolean))
+            {
+                return;
+            }
+            Write(_value);
         }
         public override bool Write(object value)
         {
             DeviceAddress address = GetDeviceAddress(Address, 1);
-            return ((KeyencePlcDrive)Parent).WriteBit(address,(bool)value);
+            return ((KeyencePlcDrive)Parent).WriteBit(address,((Storage)value).Boolean);
 
         }
     }
@@ -154,15 +172,25 @@ namespace KVDrive
         public override void Update(Storage newValue)
         {
             if (_value.Single.Equals(newValue.Single)) return;
+            _value = newValue;
+            _lastValue = newValue;
             if (ValueChangeEvent != null)
             {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue.Single.ToString()));
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
             }
+        }
+        public override void UpdatePLC()
+        {
+            if (_lastValue.Single.Equals(_value.Single))
+            {
+                return;
+            }
+            Write(_value);
         }
         public override bool Write(object value)
         {
             DeviceAddress address = GetDeviceAddress(Address, 2);
-            return ((KeyencePlcDrive)Parent).WriteFloat(address, (float)value);
+            return ((KeyencePlcDrive)Parent).WriteFloat(address, ((Storage)value).Single);
 
         }
     }
@@ -197,42 +225,17 @@ namespace KVDrive
             Empty = new Storage();
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null) return false;
-            Type type = obj.GetType();
-            if (type == typeof(Storage))
-                return this.Int32 == ((Storage)obj).Int32;
-            else
-            {
-                if (type == typeof(int))
-                    return this.Int32 == (int)obj;
-                if (type == typeof(short))
-                    return this.Int16 == (short)obj;
-                if (type == typeof(byte))
-                    return this.Byte == (byte)obj;
-                if (type == typeof(bool))
-                    return this.Boolean == (bool)obj;
-                if (type == typeof(float))
-                    return this.Single == (float)obj;
-                if (type == typeof(ushort))
-                    return this.Word == (ushort)obj;
-                if (type == typeof(uint))
-                    return this.DWord == (uint)obj;
-                if (type == typeof(string))
-                    return this.ToString() == obj.ToString();
-            }
-            return false;
-        }
+
     }
     public delegate void ValueChangeHandler(ITag sender, ValueChangeEventArgs e);
     public class ValueChangeEventArgs : EventArgs
     {
-        public ValueChangeEventArgs(string value)
+        public ValueChangeEventArgs(Storage value)
         {
             this.Value = value;
         }
 
-        public string Value;
+        public Storage Value;
     }
+
 }

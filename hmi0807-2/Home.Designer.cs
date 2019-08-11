@@ -46,6 +46,8 @@
             this.kvButton1.TabIndex = 0;
             this.kvButton1.Text = "压紧";
             this.kvButton1.UseVisualStyleBackColor = true;
+            this.kvButton1.KVTags[0] = new KVDrive.BoolTag(2, KVDrive.Storage.Empty, kvButton1.KVMemAddr);
+            this.kvButton1.KVTags[0].ValueChangeEvent += this.kvButton1.ValueChange;
             // 
             // button1
             // 

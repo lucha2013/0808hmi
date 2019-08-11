@@ -18,15 +18,15 @@ namespace KVControl
     {
         private bool _kvReadOnly;
         private string _kvMenAddr;
-        private ITag[] _kvTags=new ITag[2];
+        private ITag[] _kvTags=new ITag[1];
         private KVType _kvType;
 
         public KVButton() : base()
         {
-            for(int i=0;i<2;i++)
-            {
-                _kvTags[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
-            }
+            //for(int i=0;i<2;i++)
+            //{
+            //    _kvTags[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
+            //}
             //this._kvTags[0].ValueChangeEvent += ValueChange;
         }
         public Color KVTrueColor

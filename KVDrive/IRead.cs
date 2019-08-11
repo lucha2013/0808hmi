@@ -59,7 +59,7 @@ namespace KVDrive
             //TimeStamp = timeStamp;
             Quality = quality;
         }
-        
+
     }
 
 

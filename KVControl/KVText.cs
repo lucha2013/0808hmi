@@ -23,11 +23,11 @@ namespace KVControl
 
         public KVText() : base()
         {
-            //if (_kvTags[0] == null)
-            //{
-            //    _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
-            //}
-            //this._kvTags[0].ValueChangeEvent += ValueChange;  
+            if (_kvTags[0] == null)
+            {
+                _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
+            }
+            this._kvTags[0].ValueChangeEvent += ValueChange;
         }
 
         public ITag[] KVTags { get { return _kvTags; } set { _kvTags = value; } }
@@ -58,14 +58,28 @@ namespace KVControl
                 }
                 this.Invoke(new Action(() => 
                 {
-                    this.Text = e.Value;
+
+                    this.Text = GetData2String((ITag)sender,e.Value);
                 }));
                 
             }
             else
             {
-                this.Text = e.Value;
+                this.Text = GetData2String((ITag)sender, e.Value);
             }
+        }
+        public string GetData2String(ITag  tag, Storage storage)
+        {
+            Type t = tag.GetType();
+            if(t==typeof(BoolTag))
+            {
+                return storage.Boolean.ToString();
+            }
+            if(t == typeof(FloatTag))
+            {
+                return storage.Single.ToString();
+            }
+            return null;
         }
     }
 }
