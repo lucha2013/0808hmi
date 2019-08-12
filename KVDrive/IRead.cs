@@ -50,13 +50,11 @@ namespace KVDrive
     public struct ItemData<T>
     {
         public T Value;
-        //public long TimeStamp;
         public bool Quality;
 
         public ItemData(T value,bool quality)
         {
             Value = value;
-            //TimeStamp = timeStamp;
             Quality = quality;
         }
 

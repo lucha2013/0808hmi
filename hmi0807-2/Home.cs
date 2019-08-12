@@ -35,22 +35,16 @@ namespace hmi0807_2
         private void Home_Load(object sender, EventArgs e)
         {
             ParaSettingForm = new ParaSetting() { FromWindow = this };
-            AddTags2Group(this, Groups[0] = new KVGroup(true, 1, "homeGroup", 50, new List<ITag>()));
-            AddTags2Group(ParaSettingForm, Groups[1] = new KVGroup(false, 2, "paraSettingGroup", 50, new List<ITag>()));
             KeyencePlcDrive kvPLCDrive = new KeyencePlcDrive(1, "KeyencePLCDrive", "192.168.50.211", 5000);
-            foreach(ITag tag in Groups[0].Items)
-            {
-                tag.Parent = kvPLCDrive;
-            }
-            foreach (ITag tag in Groups[1].Items)
-            {
-                tag.Parent = kvPLCDrive;
-            }
+            //将窗口内的 TAG 加到相应的 Group 里面
+            AddTags2Group(this, Groups[0] = new KVGroup(true, 1, "homeGroup", 50, new List<ITag>()),kvPLCDrive);
+            AddTags2Group(ParaSettingForm, Groups[1] = new KVGroup(false, 2, "paraSettingGroup", 50, new List<ITag>()),kvPLCDrive);           
+
             kvPLCDrive.Groups = Groups;
             kvPLCDrive.init();
         }
 
-        private void AddTags2Group(Form home, KVGroup homeGroup)
+        private void AddTags2Group(Form home, KVGroup homeGroup, KeyencePlcDrive kVDrive)
         {
 
             Control.ControlCollection controlCollection = home.Controls;
@@ -67,6 +61,8 @@ namespace hmi0807_2
                     foreach (ITag tag in ((KVBox)control).KVTags)
                     {
                         homeGroup.AddTag(tag);
+                        tag.ValueChangeEvent += ((KVBox)control).ValueChange;
+                        tag.Parent = kVDrive;                       
                     }
                         
                 }
@@ -89,9 +85,6 @@ namespace hmi0807_2
             return o.GetType().GetProperty(property) != null;
         }
 
-        private void KvText1_Click(object sender, EventArgs e)
-        {
 
-        }
     }
 }

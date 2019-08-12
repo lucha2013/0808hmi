@@ -11,23 +11,19 @@ using KVDrive;
 namespace KVControl
 {
     /// <summary>
-    /// 指示灯开关
+    /// 开关
     /// [0]
     /// </summary>
     public class KVButton : Button,KVBox
     {
-        private bool _kvReadOnly;
+        private bool _kvReadOnly = false;
         private string _kvMenAddr;
-        private ITag[] _kvTags=new ITag[1];
-        private KVType _kvType;
+        private ITag[] _kvTags;
+        private short _kvTagCount = 1;
 
         public KVButton() : base()
         {
-            //for(int i=0;i<2;i++)
-            //{
-            //    _kvTags[i] = new BoolTag(1,Storage.Empty,_kvMenAddr);
-            //}
-            //this._kvTags[0].ValueChangeEvent += ValueChange;
+            _kvTags = new ITag[_kvTagCount];
         }
         public Color KVTrueColor
         {
@@ -41,17 +37,6 @@ namespace KVControl
         public bool KVReadOnly
         {
             get { return _kvReadOnly; }
-            set
-            {
-                if (_kvType == KVType.Light)
-                {
-                    _kvReadOnly = true;
-                }
-                else if(_kvType == KVType.Button || _kvType == KVType.ButtonAndLight)
-                {
-                    _kvReadOnly = false;
-                }
-            }
         }
         public string KVMemAddr { get { return _kvMenAddr; } set { _kvMenAddr = value; } }
         public ITag[] KVTags
@@ -59,12 +44,14 @@ namespace KVControl
             get { return _kvTags; }
             set { _kvTags= value; }
         }
-
-        public KVType KVType { get { return _kvType;  }set { _kvType = value; } }
+        public short KVTagCount
+        {
+            get { return _kvTagCount; }
+        }
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {
-            if (e.Value.Equals("true"))
+            if (e.Value.Boolean)
             {
                 this.BackColor = KVTrueColor;
             }

@@ -10,21 +10,12 @@ namespace KVControl
 {
     public interface KVBox
     {
-        bool KVReadOnly { get; set; }
+        bool KVReadOnly { get; }
         string KVMemAddr { get; set; }
         ITag[] KVTags { get; set; }
-        KVType KVType { get; }
-     
+        short KVTagCount { get; }
+        void ValueChange(object sender, ValueChangeEventArgs e);
+
+
     }
-
-
-    public enum KVType
-    {
-        Button = 1,
-        Light = 2,
-        ButtonAndLight = 3,
-        NumberInput=4,
-        Label=5,
-    }
-
 }

@@ -13,21 +13,17 @@ namespace KVControl
     /// <summary>
     /// 指示灯开关
     /// </summary>
-    public class KVText : TextBox, KVBox
+    public class KVFloatText : TextBox, KVBox
     {
-        private bool _kvReadOnly;
+        private bool _kvReadOnly=false;
         private string _kvMenAddr;
-        private ITag[] _kvTags=new ITag[1];
-        private KVType _kvType;
-        
+        private ITag[] _kvTags;
+        private short _kvTagCount = 1;
 
-        public KVText() : base()
+
+        public KVFloatText() : base()
         {
-            if (_kvTags[0] == null)
-            {
-                _kvTags[0] = new BoolTag(1, Storage.Empty, _kvMenAddr);
-            }
-            this._kvTags[0].ValueChangeEvent += ValueChange;
+            _kvTags = new ITag[_kvTagCount];
         }
 
         public ITag[] KVTags { get { return _kvTags; } set { _kvTags = value; } }
@@ -41,10 +37,13 @@ namespace KVControl
         {
             get; set;
         }
-        public bool KVReadOnly { get { return _kvReadOnly; } set { _kvReadOnly = value; } }
+        public bool KVReadOnly { get { return _kvReadOnly; }  }
         public string KVMemAddr { get { return _kvMenAddr; } set { _kvMenAddr = value; } }
 
-        public KVType KVType { get { return _kvType; }set { _kvType = value; } }
+        public short KVTagCount
+        {
+            get { return _kvTagCount; }
+        }
 
         public void ValueChange(object sender, ValueChangeEventArgs e)
         {
@@ -59,13 +58,13 @@ namespace KVControl
                 this.Invoke(new Action(() => 
                 {
 
-                    this.Text = GetData2String((ITag)sender,e.Value);
+                    this.Text =e.Value.Single.ToString();
                 }));
                 
             }
             else
             {
-                this.Text = GetData2String((ITag)sender, e.Value);
+                this.Text = e.Value.Single.ToString();
             }
         }
         public string GetData2String(ITag  tag, Storage storage)

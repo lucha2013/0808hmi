@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+//using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -18,6 +19,7 @@ namespace KVDrive
             _port = port;
 
         }
+        //public static AutoResetEvent event_1 = new AutoResetEvent(true);
         private short _id;
         private string _name;
         private string _ip;
@@ -87,40 +89,27 @@ namespace KVDrive
             time1.Interval = 1000;
             time1.Elapsed += Time1_Elapsed;
             time1.Start();
-            //while (true)
-            //{
-            //    foreach(IGroup grp in _grps)
-            //    {
-            //        if (grp.IsActive)
-            //        {
-                        
-            //        }
-            //    }
-            //}
-            
-
-                
-
-        }
+       }
 
         private void Time1_Elapsed(object sender, ElapsedEventArgs e)
         {
+            time1.Stop();
             foreach (IGroup grp in _grps)
             {
 
                 if (grp != null&&grp.IsActive )
                 {
-                    time1.Interval = 10000;
                     Refresh(grp);
                 }
             }
+            time1.Start();
         }
 
         private void Refresh(IGroup grp)
         {
             foreach(ITag tag in grp.Items)
             {
-                tag.Update(tag.Refresh());
+                tag.Update();
                 tag.UpdatePLC();
             }
         }

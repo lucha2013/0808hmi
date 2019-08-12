@@ -28,26 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.kvButton1 = new KVControl.KVButton();
             this.button1 = new System.Windows.Forms.Button();
-            this.kvText1 = new KVControl.KVText();
+            this.kvButton1 = new KVControl.KVButton();
+            this.kvFloatText1 = new KVControl.KVFloatText();
             this.SuspendLayout();
-            // 
-            // kvButton1
-            // 
-            this.kvButton1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvButton1.KVMemAddr = "M1000";
-            this.kvButton1.KVReadOnly = false;
-            this.kvButton1.KVTrueColor = System.Drawing.Color.Empty;
-            this.kvButton1.KVType = KVControl.KVType.Light;
-            this.kvButton1.Location = new System.Drawing.Point(169, 105);
-            this.kvButton1.Name = "kvButton1";
-            this.kvButton1.Size = new System.Drawing.Size(92, 36);
-            this.kvButton1.TabIndex = 0;
-            this.kvButton1.Text = "压紧";
-            this.kvButton1.UseVisualStyleBackColor = true;
-            this.kvButton1.KVTags[0] = new KVDrive.BoolTag(2, KVDrive.Storage.Empty, kvButton1.KVMemAddr);
-            this.kvButton1.KVTags[0].ValueChangeEvent += this.kvButton1.ValueChange;
             // 
             // button1
             // 
@@ -59,27 +43,41 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // kvText1
+            // kvButton1
             // 
-            this.kvText1.KVFalseColor = System.Drawing.Color.Empty;
-            this.kvText1.KVMemAddr = "D1000";
-            this.kvText1.KVReadOnly = false;
-            this.kvText1.KVTrueColor = System.Drawing.Color.Empty;
-            this.kvText1.Location = new System.Drawing.Point(428, 105);
-            this.kvText1.Name = "kvText1";
-            this.kvText1.Size = new System.Drawing.Size(100, 25);
-            this.kvText1.KVTags[0] = new KVDrive.FloatTag(1, KVDrive.Storage.Empty, kvText1.KVMemAddr);
-            this.kvText1.KVTags[0].ValueChangeEvent += this.kvText1.ValueChange;
-            this.kvText1.TabIndex = 3;
+            this.kvButton1.KVFalseColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.kvButton1.KVMemAddr = "M1000";
+            this.kvButton1.KVTags = new KVDrive.ITag[] {
+        null};
+            this.kvButton1.KVTrueColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.kvButton1.Location = new System.Drawing.Point(160, 88);
+            this.kvButton1.Name = "kvButton1";
+            this.kvButton1.Size = new System.Drawing.Size(105, 40);
+            this.kvButton1.TabIndex = 3;
+            this.kvButton1.Text = "kvButton1";
+            this.kvButton1.UseVisualStyleBackColor = true;
+            // 
+            // kvFloatText1
+            // 
+            this.kvFloatText1.KVFalseColor = System.Drawing.Color.Red;
+            this.kvFloatText1.KVMemAddr = "D1000";
+            this.kvFloatText1.KVTags = new KVDrive.ITag[] {
+        null};
+            this.kvFloatText1.KVTrueColor = System.Drawing.Color.Black;
+            this.kvFloatText1.Location = new System.Drawing.Point(364, 98);
+            this.kvFloatText1.Name = "kvFloatText1";
+            this.kvFloatText1.Size = new System.Drawing.Size(100, 25);
+            this.kvFloatText1.TabIndex = 4;
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.kvText1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.kvFloatText1);
             this.Controls.Add(this.kvButton1);
+            this.Controls.Add(this.button1);
             this.Name = "Home";
             this.Text = "Home";
             this.Load += new System.EventHandler(this.Home_Load);
@@ -90,9 +88,10 @@
 
         #endregion
 
-        private KVControl.KVButton kvButton1;
+
         private System.Windows.Forms.Button button1;
-        private KVControl.KVText kvText1;
+        private KVControl.KVButton kvButton1;
+        private KVControl.KVFloatText kvFloatText1;
     }
 }
 

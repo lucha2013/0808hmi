@@ -36,7 +36,6 @@ namespace KVDrive
         private short _id;
 
         public IDriver Parent { get { return _drive; } set { _drive = value; } }
-        //public DateTime TimeStamp { get { return _timeStamp; } }
         public short ID { get { return _id; } }
         protected Storage _value;
         protected Storage _lastValue;
@@ -51,24 +50,30 @@ namespace KVDrive
         /// 读取PLC
         /// </summary>
         /// <returns></returns>
-        public Storage Refresh()
-        {
-            return Read();
-        }
+        
             
 
         public string Address { get { return _address; } set { _address = value; } }
 
-        public abstract void Update(Storage newValue);
-        //public void Update(Storage newValue)
-        //{
-        //    if (_value.Equals(newValue)) return;
-        //    if (ValueChangeEvent != null)
-        //    {
-        //        ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
-        //    }
-        //}
-        public abstract void UpdatePLC();
+        public void Update()
+        {
+            Storage newValue = Read();
+            if (_value.Equals(newValue)) return;
+            _value = newValue;
+            _lastValue = newValue;
+            if (ValueChangeEvent != null)
+            {
+                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
+            }
+        }
+        public void UpdatePLC()
+        {
+            if (_lastValue.Equals(_value))
+            {
+                return;
+            }
+            Write(_value);
+        }
         public string GetAddress(DeviceAddress address)
         {
             throw new NotImplementedException();
@@ -122,24 +127,7 @@ namespace KVDrive
             value.Boolean = response.Value;
             return value;
         }
-        public override void Update(Storage newValue)
-        {
-            if (_value.Boolean.Equals(newValue.Boolean)) return;
-            _value = newValue;
-            _lastValue = newValue;
-            if (ValueChangeEvent != null)
-            {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
-            }
-        }
-        public override void UpdatePLC()
-        {
-            if (_lastValue.Boolean.Equals(_value.Boolean))
-            {
-                return;
-            }
-            Write(_value);
-        }
+        
         public override bool Write(object value)
         {
             DeviceAddress address = GetDeviceAddress(Address, 1);
@@ -168,24 +156,6 @@ namespace KVDrive
             Storage value = Storage.Empty;
             value.Single = response.Value;
             return value;
-        }
-        public override void Update(Storage newValue)
-        {
-            if (_value.Single.Equals(newValue.Single)) return;
-            _value = newValue;
-            _lastValue = newValue;
-            if (ValueChangeEvent != null)
-            {
-                ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
-            }
-        }
-        public override void UpdatePLC()
-        {
-            if (_lastValue.Single.Equals(_value.Single))
-            {
-                return;
-            }
-            Write(_value);
         }
         public override bool Write(object value)
         {
