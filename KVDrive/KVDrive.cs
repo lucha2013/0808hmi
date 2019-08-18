@@ -136,26 +136,31 @@ namespace KVDrive
                 return false;
             }
         }
+        object _async = new object();
         public byte[] SyncSend(byte[] sendBuf)
         {
             if (sendBuf.Length < 1) return null;
             if (IsClosed) return null;
-            try
+            lock (_async)
             {
-                int sendLen = socketSyc.Send(sendBuf);
-                if (sendLen < 1)
+                try
                 {
-                    return null;
-                }
-                byte[] data = new byte[1024];
-                int receiveLen = socketSyc.Receive(data);
-                byte[] buf = new byte[receiveLen];
-                Array.Copy(data, 0, buf, 0, receiveLen);
-                return buf;
-            }
-            catch
-            {
 
+                    int sendLen = socketSyc.Send(sendBuf);
+                    if (sendLen < 1)
+                    {
+                        return null;
+                    }
+                    byte[] data = new byte[1024];
+                    int receiveLen = socketSyc.Receive(data);
+                    byte[] buf = new byte[receiveLen];
+                    Array.Copy(data, 0, buf, 0, receiveLen);
+                    return buf;
+                }
+                catch
+                {
+
+                }
             }
             return null;
 
