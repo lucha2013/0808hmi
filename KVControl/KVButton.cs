@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using KVDrive;
-
+using System.ComponentModel;
 
 namespace KVControl
 {
@@ -18,12 +18,12 @@ namespace KVControl
     {
         private bool _kvReadOnly = false;
         private string _kvMenAddr;
-        private ITag[] _kvTags;
-        private short _kvTagCount = 1;
+        private List<ITag> _kvTags;
 
         public KVButton() : base()
         {
-            _kvTags = new ITag[_kvTagCount];
+            _kvTags = new List<ITag>();
+            _kvTags.Add(new BoolTag(1,Storage.Empty,_kvMenAddr));
         }
         public Color KVTrueColor
         {
@@ -39,14 +39,11 @@ namespace KVControl
             get { return _kvReadOnly; }
         }
         public string KVMemAddr { get { return _kvMenAddr; } set { _kvMenAddr = value; } }
-        public ITag[] KVTags
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public List<ITag> KVTags
         {
             get { return _kvTags; }
             set { _kvTags= value; }
-        }
-        public short KVTagCount
-        {
-            get { return _kvTagCount; }
         }
 
         public void ValueChange(object sender, ValueChangeEventArgs e)

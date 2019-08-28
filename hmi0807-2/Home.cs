@@ -62,7 +62,8 @@ namespace hmi0807_2
                     {
                         homeGroup.AddTag(tag);
                         tag.ValueChangeEvent += ((KVBox)control).ValueChange;
-                        tag.Parent = kVDrive;                       
+                        tag.Parent = kVDrive;
+                        tag.Address = ((KVBox)control).KVMemAddr;
                     }
                         
                 }
@@ -83,6 +84,16 @@ namespace hmi0807_2
             Type t = o.GetType();
             PropertyInfo propertyInfo = t.GetProperty(property);
             return o.GetType().GetProperty(property) != null;
+        }
+
+        private void kvFloatText1_TextChanged(object sender, EventArgs e)
+        {
+            //KeyencePlcDrive.eventRead.WaitOne();
+            //foreach (ITag tag in ((KVBox)kvFloatText1).KVTags)
+            //{
+            //    tag.UpdatePLC();
+            //}
+            //KeyencePlcDrive.eventRead.Set();
         }
 
 

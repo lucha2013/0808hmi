@@ -12,8 +12,8 @@ namespace KVControl
     {
         bool KVReadOnly { get; }
         string KVMemAddr { get; set; }
-        ITag[] KVTags { get; set; }
-        short KVTagCount { get; }
+        List<ITag> KVTags { get; set; }
+        //short KVTagCount { get; }
         void ValueChange(object sender, ValueChangeEventArgs e);
 
 

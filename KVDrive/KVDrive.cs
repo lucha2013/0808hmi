@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-//using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
+//using System.Timers;
 
 namespace KVDrive
 {
@@ -19,7 +19,7 @@ namespace KVDrive
             _port = port;
 
         }
-        //public static AutoResetEvent event_1 = new AutoResetEvent(true);
+        public static AutoResetEvent eventRead= new AutoResetEvent(true);
         private short _id;
         private string _name;
         private string _ip;
@@ -27,7 +27,7 @@ namespace KVDrive
         private Socket socketSyc;
         private int _timeout;
         private IEnumerable<IGroup> _grps;
-        private Timer time1 = new Timer();
+        private Timer time1;
 
         public short ID
         {
@@ -84,25 +84,21 @@ namespace KVDrive
             {
                 return;
             }
-            time1.Enabled = true;
-            time1.AutoReset = false;
-            time1.Interval = 1000;
-            time1.Elapsed += Time1_Elapsed;
-            time1.Start();
+            time1 = new Timer(Time1Elapsed, eventRead, 1000, 2500000);
        }
 
-        private void Time1_Elapsed(object sender, ElapsedEventArgs e)
+        private void Time1Elapsed(object state)
         {
-            time1.Stop();
+            eventRead.WaitOne();
             foreach (IGroup grp in _grps)
             {
 
-                if (grp != null&&grp.IsActive )
+                if (grp != null && grp.IsActive)
                 {
                     Refresh(grp);
                 }
             }
-            time1.Start();
+            eventRead.Set();
         }
 
         private void Refresh(IGroup grp)
@@ -110,7 +106,6 @@ namespace KVDrive
             foreach(ITag tag in grp.Items)
             {
                 tag.Update();
-                tag.UpdatePLC();
             }
         }
 

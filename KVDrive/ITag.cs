@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace KVDrive
 {
+
     public abstract class ITag : IComparable<ITag>
     {
         public ITag(short id, Storage value,string address,IDriver parent)
@@ -24,6 +25,7 @@ namespace KVDrive
             this._value = value;
             this._address = address;
             this._lastValue = _value;
+            
 
         }
 
@@ -107,10 +109,10 @@ namespace KVDrive
     }
     public class BoolTag : ITag
     {
-        //public BoolTag() : base()
-        //{
+        public BoolTag() : base()
+        {
 
-        //}
+        }
         public BoolTag(short id, Storage value, string address):base(id, value,address)
         {
             
@@ -137,10 +139,10 @@ namespace KVDrive
     }
     public class FloatTag : ITag
     {
-        //public BoolTag() : base()
-        //{
+        public FloatTag() : base()
+        {
 
-        //}
+        }
         public FloatTag(short id, Storage value, string address) : base(id, value, address)
         {
 

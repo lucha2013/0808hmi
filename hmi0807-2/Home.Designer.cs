@@ -31,13 +31,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.kvButton1 = new KVControl.KVButton();
             this.kvFloatText1 = new KVControl.KVFloatText();
+            this.kvFloatText2 = new KVControl.KVFloatText();
+            this.kvFloatText3 = new KVControl.KVFloatText();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(169, 275);
+            this.button1.Location = new System.Drawing.Point(127, 220);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 42);
+            this.button1.Size = new System.Drawing.Size(72, 34);
             this.button1.TabIndex = 2;
             this.button1.Text = "参数设定";
             this.button1.UseVisualStyleBackColor = true;
@@ -45,39 +48,58 @@
             // 
             // kvButton1
             // 
-            this.kvButton1.KVFalseColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.kvButton1.KVFalseColor = System.Drawing.Color.Empty;
             this.kvButton1.KVMemAddr = "M1000";
-            this.kvButton1.KVTags = new KVDrive.ITag[] {
-        null};
-            this.kvButton1.KVTrueColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.kvButton1.Location = new System.Drawing.Point(160, 88);
+            this.kvButton1.KVTrueColor = System.Drawing.Color.Empty;
+            this.kvButton1.Location = new System.Drawing.Point(124, 66);
             this.kvButton1.Name = "kvButton1";
-            this.kvButton1.Size = new System.Drawing.Size(105, 40);
+            this.kvButton1.Size = new System.Drawing.Size(75, 23);
             this.kvButton1.TabIndex = 3;
             this.kvButton1.Text = "kvButton1";
             this.kvButton1.UseVisualStyleBackColor = true;
             // 
             // kvFloatText1
             // 
-            this.kvFloatText1.KVFalseColor = System.Drawing.Color.Red;
+            this.kvFloatText1.KVFalseColor = System.Drawing.Color.Empty;
             this.kvFloatText1.KVMemAddr = "D1000";
-            this.kvFloatText1.KVTags = new KVDrive.ITag[] {
-        null};
-            this.kvFloatText1.KVTrueColor = System.Drawing.Color.Black;
-            this.kvFloatText1.Location = new System.Drawing.Point(364, 98);
+            this.kvFloatText1.KVTrueColor = System.Drawing.Color.Empty;
+            this.kvFloatText1.Location = new System.Drawing.Point(335, 66);
             this.kvFloatText1.Name = "kvFloatText1";
-            this.kvFloatText1.Size = new System.Drawing.Size(100, 25);
+            this.kvFloatText1.Size = new System.Drawing.Size(100, 21);
             this.kvFloatText1.TabIndex = 4;
+            // 
+            // kvFloatText2
+            // 
+            this.kvFloatText2.KVFalseColor = System.Drawing.Color.Empty;
+            this.kvFloatText2.KVMemAddr = "D2000";
+            this.kvFloatText2.KVTrueColor = System.Drawing.Color.Empty;
+            this.kvFloatText2.Location = new System.Drawing.Point(335, 118);
+            this.kvFloatText2.Name = "kvFloatText2";
+            this.kvFloatText2.Size = new System.Drawing.Size(100, 21);
+            this.kvFloatText2.TabIndex = 5;
+            // 
+            // kvFloatText3
+            // 
+            this.kvFloatText3.KVFalseColor = System.Drawing.Color.Empty;
+            this.kvFloatText3.KVMemAddr = "D3000";
+            this.kvFloatText3.KVTrueColor = System.Drawing.Color.Empty;
+            this.kvFloatText3.Location = new System.Drawing.Point(335, 189);
+            this.kvFloatText3.Name = "kvFloatText3";
+            this.kvFloatText3.Size = new System.Drawing.Size(100, 21);
+            this.kvFloatText3.TabIndex = 6;
             // 
             // Home
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 360);
+            this.Controls.Add(this.kvFloatText3);
+            this.Controls.Add(this.kvFloatText2);
             this.Controls.Add(this.kvFloatText1);
             this.Controls.Add(this.kvButton1);
             this.Controls.Add(this.button1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Home";
             this.Text = "Home";
             this.Load += new System.EventHandler(this.Home_Load);
@@ -90,8 +112,11 @@
 
 
         private System.Windows.Forms.Button button1;
+
         private KVControl.KVButton kvButton1;
         private KVControl.KVFloatText kvFloatText1;
+        private KVControl.KVFloatText kvFloatText2;
+        private KVControl.KVFloatText kvFloatText3;
     }
 }
 
