@@ -84,7 +84,7 @@ namespace KVDrive
             {
                 return;
             }
-            time1 = new Timer(Time1Elapsed, eventRead, 1000, 2500000);
+            time1 = new Timer(Time1Elapsed, eventRead, 1000, 250);
        }
 
         private void Time1Elapsed(object state)
