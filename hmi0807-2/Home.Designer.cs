@@ -67,6 +67,7 @@
             this.kvFloatText1.Name = "kvFloatText1";
             this.kvFloatText1.Size = new System.Drawing.Size(100, 21);
             this.kvFloatText1.TabIndex = 4;
+            this.kvFloatText1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.kvFloatText1_KeyPress);
             // 
             // kvFloatText2
             // 

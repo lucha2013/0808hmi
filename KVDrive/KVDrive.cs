@@ -84,7 +84,7 @@ namespace KVDrive
             {
                 return;
             }
-            time1 = new Timer(Time1Elapsed, eventRead, 1000, 250);
+            time1 = new Timer(Time1Elapsed, eventRead, 1000, 2500000);
        }
 
         private void Time1Elapsed(object state)
@@ -131,27 +131,32 @@ namespace KVDrive
                 return false;
             }
         }
+        private object socketLock = new object();
         public byte[] SyncSend(byte[] sendBuf)
         {
             if (sendBuf.Length < 1) return null;
             if (IsClosed) return null;
-            try
+            lock (socketLock)
             {
-                int sendLen = socketSyc.Send(sendBuf);
-                if (sendLen < 1)
+                try
                 {
-                    return null;
+                    int sendLen = socketSyc.Send(sendBuf);
+                    if (sendLen < 1)
+                    {
+                        return null;
+                    }
+                    byte[] data = new byte[1024];
+                    int receiveLen = socketSyc.Receive(data);
+                    byte[] buf = new byte[receiveLen];
+                    Array.Copy(data, 0, buf, 0, receiveLen);
+                    return buf;
                 }
-                byte[] data = new byte[1024];
-                int receiveLen = socketSyc.Receive(data);
-                byte[] buf = new byte[receiveLen];
-                Array.Copy(data, 0, buf, 0, receiveLen);
-                return buf;
-            }
-            catch
-            {
+                catch
+                {
 
+                }
             }
+
             return null;
 
         }

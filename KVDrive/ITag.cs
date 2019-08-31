@@ -68,9 +68,9 @@ namespace KVDrive
                 ValueChangeEvent(this, new ValueChangeEventArgs(newValue));
             }
         }
-        public void UpdatePLC()
+        public void UpdatePLC(Storage storage)
         {
-            if (_lastValue.Equals(_value))
+            if (storage.Equals(_value))
             {
                 return;
             }

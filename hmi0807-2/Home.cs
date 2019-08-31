@@ -86,16 +86,20 @@ namespace hmi0807_2
             return o.GetType().GetProperty(property) != null;
         }
 
-        private void kvFloatText1_TextChanged(object sender, EventArgs e)
+        private void kvFloatText1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //KeyencePlcDrive.eventRead.WaitOne();
-            //foreach (ITag tag in ((KVBox)kvFloatText1).KVTags)
-            //{
-            //    tag.UpdatePLC();
-            //}
-            //KeyencePlcDrive.eventRead.Set();
+            if (e.KeyChar == 13)
+            {
+                KeyencePlcDrive.eventRead.WaitOne();
+                float f = float.Parse(((KVFloatText)sender).Text);
+                Storage storage = Storage.Empty;
+                storage.Single = f;
+                foreach (ITag tag in ((KVBox)sender).KVTags)
+                {
+                    tag.UpdatePLC(storage);
+                }
+                KeyencePlcDrive.eventRead.Set();
+            }
         }
-
-
     }
 }
